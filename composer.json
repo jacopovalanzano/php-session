@@ -1,0 +1,19 @@
+{
+    "name": "tundra/session",
+    "description": "Intuitive library for managing complex session handling.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Tundra\\Session\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jacopovalanzano",
+            "email": "jacopo.valanzano@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
