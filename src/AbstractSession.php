@@ -204,16 +204,16 @@ abstract class AbstractSession implements \SessionHandlerInterface
     public function safeStart(array $options = []): bool
     {
         if ( \session_status() === \PHP_SESSION_DISABLED ) {
-            throw new \RuntimeException("Session must be enabled", PHP_SESSION_DISABLED);
+            throw new \RuntimeException("Session must be enabled", \PHP_SESSION_DISABLED);
         }
 
         // Session must be initalized
         if ( \session_status() === \PHP_SESSION_NONE ) {
-            throw new \RuntimeException("You must start a new session", PHP_SESSION_NONE);
+            throw new \RuntimeException("You must start a new session", \PHP_SESSION_NONE);
         }
 
         if ( \session_status() === \PHP_SESSION_ACTIVE ) {
-            throw new \RuntimeException("Session already open", PHP_SESSION_ACTIVE);
+            throw new \RuntimeException("Session already open", \PHP_SESSION_ACTIVE);
         }
 
         return $this->start($options);

@@ -237,14 +237,6 @@ trait SessionTrait
     }
 
     /**
-     * @return false|int
-     */
-    public function sessionGc()
-    {
-        return \session_gc();
-    }
-
-    /**
      * @param int $value
      * @return false|int
      */

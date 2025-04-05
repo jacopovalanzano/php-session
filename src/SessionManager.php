@@ -41,7 +41,7 @@ class SessionManager extends AbstractSession
 
         // If no driver of this type ($defaultDriverName) exists, throw an exception.
         if(! isset($this->driver[$this->defaultDriverName])) {
-            throw new BadMethodCallException(static::class ." does not have a definition for the driver '$this->defaultDriverName'");
+            throw new \BadMethodCallException(static::class ." does not have a definition for the driver '$this->defaultDriverName'");
         }
 
         // Return the driver instance ( of SessionDriverWrapper containing the actual session driver )
@@ -59,7 +59,7 @@ class SessionManager extends AbstractSession
     public function addDriver(string $name, \SessionHandlerInterface $driver): \SessionHandlerInterface
     {
         if(isset($this->driver[$name])) {
-            throw new RuntimeException(\get_called_class()." an entry for the Session driver ['$name'] already exists.");
+            throw new \RuntimeException(\get_called_class()." an entry for the Session driver ['$name'] already exists.");
         }
 
         return $this->driver[$name] = new SessionDriverWrapper($driver);
@@ -73,19 +73,23 @@ class SessionManager extends AbstractSession
     public function setDefaultDriver(string $name)
     {
         if(! isset($this->driver[$name])) {
-            throw new RuntimeException(\get_called_class()." does not have a definition for the driver '$name'");
+            throw new \BadMethodCallException(\get_called_class()." does not have a definition for the driver '$name'", 1);
         }
 
         $this->defaultDriverName = $name;
     }
 
     /**
-     * The current driver (name) being used for transactions.
+     * The current driver name being used for transactions.
      *
      * @return string
      */
-    public function getDefaultDriver(): string
+    public function getDefaultDriverName(): string
     {
+        if($this->defaultDriverName === null) {
+            throw new \BadMethodCallException(static::class ." does not have a definition for the default driver");
+        }
+
         return $this->defaultDriverName;
     }
 
@@ -346,7 +350,7 @@ class SessionManager extends AbstractSession
             return $this->driver()->{$method}(...$parameters);
         }
 
-        throw new RuntimeException(\get_called_class()." does not have a method '$method'");
+        throw new \RuntimeException(\get_called_class()." does not have a method '$method'");
     }
 
 }
