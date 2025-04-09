@@ -132,6 +132,8 @@ $session = new \Tundra\Session\SessionHandler();
 
 $fileDriver = new \Tundra\Session\Drivers\FileSession(); // Driver
 
+$session->setDefaultDriver("apc_driver"); // Always set a default driver
+
 $session->addDriver($fileDriver);
 
 $session->start(); // Start the session
