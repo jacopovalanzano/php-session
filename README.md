@@ -113,7 +113,7 @@ $session->openAll("/tmp/php", $session->getName());
 $session->start();
 $session->close(); // Save the session data on each driver
 ```
-⚠️ The default driver will always be opened on session start by PHP's `session_set_save_handler`, when the `start()` method is called. This behavior could lead to unexpected results if the driver is not designed to be opened more than once without being closed first. The `openAll` method causes the default driver to be opened a second time.
+⚠️ The default driver will always be opened on session start by PHP's `session_set_save_handler`, when the `start()` method is called. This behavior could lead to unexpected results if the driver is not designed to be opened more than once without being closed first. The `openAll` method causes the default driver to be opened a second time when the session starts.
 
 ### Close the session
 Depending on the driver, session data may not be readable or writable while the session is closed, often due to file
