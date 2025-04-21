@@ -7,7 +7,8 @@ It integrates with PHP's `session_set_save_handler()` and remains fully compatib
 Standard functions like `session_destroy()` and `session_write_close()` will still work but will only affect
 the default driver.
 
-You can use your webserver to set the cookie "Parted" attribute where necessary.
+You can use your web server to set the "Parted" cookie attribute where necessary,
+also my repository https://github.com/jacopovalanzano/php-http can be used to set custom cookie attributes like "Parted" via PHP.
 
 
 ## Using the session handler
