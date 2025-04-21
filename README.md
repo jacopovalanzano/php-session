@@ -31,7 +31,7 @@ $session = new \Tundra\Session\SessionHandler();
 $session->addDriver("apc_driver", $apcDriver);
 $session->addDriver("file_driver", $fileDriver);
 
-$session->setDefaultDriver("apc_driver");
+$session->setDefaultDriver("apc_driver"); // A default driver must alway be set
 
 $session->driver("file_driver")->open("/tmp/php", $session->getName()); // Open the session driver
 
@@ -101,7 +101,7 @@ $session->addDriver("sql_driver", $sqlDriver);
 $session->setDefaultDriver("apc_driver");
 
 $session->driver("file_driver")->open("/tmp/file"); // Open the file driver
-$session->driver("sql_driver")->open("/tmp/file"); // Open the SQL driver
+$session->driver("sql_driver")->open(""); // Open the SQL driver (path is empty; argument required but not actually needed by the SQL driver)
 
 $session->start(); // Let the default driver open the session
 $session->close(); // Save the session data on each driver
@@ -113,13 +113,13 @@ $session->openAll("/tmp/php", $session->getName());
 $session->start();
 $session->close(); // Save the session data on each driver
 ```
-Bear in mind that the default driver will always be opened on session start; that may cause unexpected results.
+⚠️ The default driver will always be opened on session start by PHP's `session_set_save_handler`, when the `start()` method is called. This behavior could lead to unexpected results if the driver is not designed to be opened more than once without being closed first. The `openAll` method causes the default driver to be opened a second time.
 
 ### Close the session
 Depending on the driver, session data may not be readable or writable while the session is closed, often due to file
 locks or database transactions.
 
-## Example
+## Examples
 
 Create a file session:
 
@@ -140,13 +140,22 @@ $session->addDriver($fileDriver);
 $session->start(); // Start the session
 ```
 
-You should check if the session was started:
+You should always check if the session was started:
 ```php
 
 if(! $session->isStarted()) {
     $session->start();
 }
 
+```
+
+Or even better, you can use the `safeStart` method
+```php
+try {
+    $session->safeStart();
+} catch(\RuntimeException $e) {
+    // ...
+}
 ```
 
 Create an "APC" session in-memory. The session data will be lost on restart:
@@ -164,6 +173,7 @@ $session->addDriver($apcDriver);
 
 // Start the session
 if(! $session->isStarted()) {
+    $session->open(""); // Empty path
     $session->start();
 }
 ```
@@ -182,13 +192,14 @@ $fileDriver = new \Tundra\Session\Drivers\FileSession();
 
 $session->addDriver("apc_driver", $apcDriver);
 $session->addDriver("file_driver", $fileDriver);
+
 $session->setDefaultDriver("apc_driver"); // Always set a default driver
 
 // Start the session
 if(! $session->isStarted()) {
     // Open all the drivers
     $session->openAll($path, $sessionName);
-    
+    // Start the session
     $session->start();
 }
 
@@ -236,13 +247,14 @@ class SQLSession implements \SessionHandlerInterface
 
 ```
 
-Implement the `SQLSession` driver:
-
+Implement the mock `SQLSession` driver:
 ```php
 
 $session = new \Tundra\Session\SessionHandler();
 $sqlDriver = new SQLSession();
 $session->addDriver($sqlDriver);
+
+$session->open("");
 $session->start();
 
 $session->set("foo", "bar");
@@ -253,7 +265,6 @@ $session->close();
 ```
 
 You can call custom driver methods using `driver()`:
-
 ```php
 class SQLSession implements \SessionHandlerInterface
 {
@@ -277,7 +288,6 @@ class SQLSession implements \SessionHandlerInterface
 ```
 
 Call the getData() method:
-
 ```php
 $session->driver()->getData("foo");
 ```
