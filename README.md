@@ -173,7 +173,6 @@ $session->addDriver($apcDriver);
 
 // Start the session
 if(! $session->isStarted()) {
-    $session->open(""); // Empty path
     $session->start();
 }
 ```
@@ -254,7 +253,6 @@ $session = new \Tundra\Session\SessionHandler();
 $sqlDriver = new SQLSession();
 $session->addDriver($sqlDriver);
 
-$session->open("");
 $session->start();
 
 $session->set("foo", "bar");
