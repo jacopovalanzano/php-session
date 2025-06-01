@@ -297,7 +297,7 @@ $session->driver()->getData("foo");
 #### Session destroy
 When you destroy the session, the session stops running, but the global `$_SESSION` variable remains untouched.
 However, the session storage is cleared—if using file-based storage, for example, the session file is deleted;
-if using an SQL database driver, the session record is removed.
+if using a SQL database driver, the session record is removed.
 The session data remains available within PHP until the script execution ends.
 
 #### Session invalidate
