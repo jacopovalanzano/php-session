@@ -251,7 +251,9 @@ Implement the mock `SQLSession` driver:
 
 $session = new \Tundra\Session\SessionHandler();
 $sqlDriver = new SQLSession();
-$session->addDriver($sqlDriver);
+$session->addDriver("sql_driver", $sqlDriver);
+
+$session->setDefaultDriver("sql_driver");
 
 $session->start();
 
